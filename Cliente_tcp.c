@@ -10,13 +10,14 @@ int main(){
     
     int conection = 0;
     int socket_id = 0;
-    char msg[] = "hola sistemas embebidos\r\n";
-    socket_id = socket(PF_INET, SOCK_STREAM, 0);
+    char msg[] = "GET\r\n";
+    char buff[50] = {0};
+    socket_id = socket(PF_INET, SOCK_DGRAM, 0);
 
     struct sockaddr_in server;
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server.sin_port = htons(12000);
+    server.sin_addr.s_addr = inet_addr("200.25.20.50");
+    server.sin_port = htons(123);
 
     conection = connect(socket_id, (struct sockaddr*)&server, sizeof(server));
     if(conection < 0){
@@ -25,7 +26,11 @@ int main(){
     }
 
     printf("Conexión realizada con éxito\r\n");
-    send(socket_id, msg, sizeof(msg), 0);
+    //send(socket_id, msg, sizeof(msg), 0);
+    while(recv(socket_id, buff, sizeof(buff), 0) > 0){
+        printf("%s", buff);
+    }
+
     close(socket_id);          
     return(0);   
 }
